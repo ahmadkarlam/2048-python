@@ -8,6 +8,7 @@ EMPTY_ROW = [0, 0, 0, 0]
 class Game:
     def __init__(self, numbers):
         self.numbers = np.array(numbers)
+        self.score = 0
 
     def draw(self):
         board = [TAG_END]
@@ -21,22 +22,28 @@ class Game:
         return board
 
     def up(self):
-        numbers = self.calculate_table(np.rot90(self.numbers, 2))
+        numbers, score = self.calculate_table(np.rot90(self.numbers, 2))
+        self.score += score
         self.numbers = np.rot90(numbers, 2)
 
     def down(self):
-        return self.calculate_table(self.numbers)
+        numbers, score = self.calculate_table(self.numbers)
+        self.score += score
+        self.numbers = numbers
 
     def right(self):
-        numbers = self.calculate_table(np.rot90(self.numbers, -1))
+        numbers, score = self.calculate_table(np.rot90(self.numbers, -1))
+        self.score += score
         self.numbers = np.rot90(numbers)
 
     def left(self):
-        numbers = self.calculate_table(np.rot90(self.numbers))
+        numbers, score = self.calculate_table(np.rot90(self.numbers))
+        self.score += score
         self.numbers = np.rot90(numbers, -1)
 
     @staticmethod
     def calculate_table(numbers):
+        score = 0
         for i in range(0, 3):
             down_row = np.array(numbers[i + 1])
             current = np.array(numbers[i])
@@ -47,6 +54,7 @@ class Game:
             for j in range(0, 4):
                 if current[j] == down_row[j]:
                     down_row[j] += current[j]
+                    score += down_row[j]
                     current[j] = 0
                 elif down_row[j] == 0:
                     down_row[j] = current[j]
@@ -55,12 +63,16 @@ class Game:
                     if numbers[i + 2][j] == 0:
                         numbers[i + 2][j] = down_row[j]
                         down_row[j] = current[j]
-                        current[j] = 0
+                    elif down_row[j] == numbers[i + 2][j]:
+                        numbers[i + 2][j] += down_row[j]
+                        score += numbers[i + 2][j]
+                        down_row[j] = current[j]
+                    current[j] = 0
 
             numbers[i + 1] = down_row
             numbers[i] = current
 
-        return numbers
+        return numbers, score
 
     @staticmethod
     def center(a, b, c, d):

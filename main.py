@@ -12,6 +12,7 @@ def main(stdscr):
     while True:
         _board = game.draw()
         stdscr.addstr("\n".join(_board))
+        stdscr.addstr("\nscore: " + str(game.score))
         stdscr.addstr("\ndebug: " + last_key)
 
         c = stdscr.getch()

@@ -245,6 +245,31 @@ class TestGame(unittest.TestCase):
                 actual = game.numbers
                 self.assertTrue(np.array_equal(actual, test["expected"]))
 
+    def test_movement(self):
+        game = Game([
+            [0, 8, 2, 2],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 16, 2, 2],
+        ])
+        game.down()
+        actual = game.numbers
+        self.assertTrue(np.array_equal(actual, [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 8, 0, 0],
+            [0, 16, 4, 4],
+        ]))
+
+        game.right()
+        actual = game.numbers
+        self.assertTrue(np.array_equal(actual, [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 8],
+            [0, 0, 16, 8],
+        ]))
+
 
 if __name__ == '__main__':
     unittest.main()
