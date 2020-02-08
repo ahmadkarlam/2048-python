@@ -51,8 +51,8 @@ class Game:
                 elif down_row[j] == 0:
                     down_row[j] = current[j]
                     current[j] = 0
-                else:
-                    if i + 2 < len(numbers):
+                elif i + 2 < len(numbers):
+                    if numbers[i + 2][j] == 0:
                         numbers[i + 2][j] = down_row[j]
                         down_row[j] = current[j]
                         current[j] = 0
