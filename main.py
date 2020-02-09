@@ -1,4 +1,6 @@
 import curses
+import json
+import random
 from curses import wrapper
 
 from game import Game
@@ -8,12 +10,14 @@ def main(stdscr):
     numbers = [[0, 8, 2, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 16, 2, 2]]
     game = Game(numbers)
     last_key = ""
+    empty = {}
 
     while True:
         _board = game.draw()
         stdscr.addstr("\n".join(_board))
         stdscr.addstr("\nscore: " + str(game.score))
-        stdscr.addstr("\ndebug: " + last_key)
+        stdscr.addstr("\nempty cell: " + str(empty))
+        stdscr.addstr("\nkey: " + last_key)
 
         c = stdscr.getch()
         if c == curses.KEY_UP:
@@ -30,9 +34,20 @@ def main(stdscr):
             last_key = "left"
         elif c == ord("q"):
             break
+        # record last move
+        game.add_recent_move(last_key)
+
+        empties = game.get_empty_cell()
+        index = random.randint(0, len(empties) - 1)
+        empty = empties[index]
+        game.fill_empty(random.choice([2, 4]), empty["i"], empty["j"])
+
         stdscr.clear()
 
     curses.endwin()
+    return game.recent_moves
 
 
-wrapper(main)
+recent_moves = wrapper(main)
+with open('movements.json', 'w') as fp:
+    json.dump(recent_moves, fp)

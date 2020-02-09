@@ -66,6 +66,7 @@ class TestGame(unittest.TestCase):
 
         for test in tests:
             with self.subTest(test["name"]):
+                print(test["name"])
                 game = Game(test["args"])
                 game.up()
                 actual = game.numbers
@@ -87,7 +88,8 @@ class TestGame(unittest.TestCase):
                     [0, 0, 0, 0],
                     [0, 16, 2, 2],
                 ]
-            }, {
+            },
+            {
                 "name": "Test case 2",
                 "args": [
                     [0, 16, 2, 2],
@@ -101,7 +103,8 @@ class TestGame(unittest.TestCase):
                     [0, 0, 0, 0],
                     [0, 16, 2, 4],
                 ]
-            }, {
+            },
+            {
                 "name": "Test case 3",
                 "args": [
                     [0, 16, 2, 2],
@@ -130,10 +133,12 @@ class TestGame(unittest.TestCase):
                     [0, 4, 0, 0],
                     [0, 8, 4, 4],
                 ],
-            }]
+            }
+        ]
 
         for test in tests:
             with self.subTest(test["name"]):
+                print(test["name"])
                 game = Game(test["args"])
                 game.down()
                 actual = game.numbers
@@ -187,6 +192,7 @@ class TestGame(unittest.TestCase):
         for test in tests:
             with self.subTest(test["name"]):
                 game = Game(test["args"])
+                print(test["name"])
                 game.right()
                 actual = game.numbers
                 self.assertTrue(np.array_equal(actual, test["expected"]))
@@ -241,11 +247,12 @@ class TestGame(unittest.TestCase):
         for test in tests:
             with self.subTest(test["name"]):
                 game = Game(test["args"])
+                print(test["name"])
                 game.left()
                 actual = game.numbers
                 self.assertTrue(np.array_equal(actual, test["expected"]))
 
-    def test_movement(self):
+    def test_movement_1(self):
         game = Game([
             [0, 8, 2, 2],
             [0, 0, 0, 0],
@@ -268,6 +275,22 @@ class TestGame(unittest.TestCase):
             [0, 0, 0, 0],
             [0, 0, 0, 8],
             [0, 0, 16, 8],
+        ]))
+
+    def test_movement_2(self):
+        game = Game([
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 4, 2, 2],
+            [0, 2, 16, 16],
+        ])
+        game.right()
+        actual = game.numbers
+        self.assertTrue(np.array_equal(actual, [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 4, 4],
+            [0, 0, 2, 32],
         ]))
 
 

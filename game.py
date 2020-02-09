@@ -8,6 +8,10 @@ EMPTY_ROW = [0, 0, 0, 0]
 class Game:
     def __init__(self, numbers):
         self.numbers = np.array(numbers)
+        self.recent_moves = [{
+            "key": "initial",
+            "numbers": self.numbers.tolist(),
+        }]
         self.score = 0
 
     def draw(self):
@@ -41,6 +45,26 @@ class Game:
         self.score += score
         self.numbers = np.rot90(numbers, -1)
 
+    def get_empty_cell(self):
+        empties = []
+        for i in range(0, 4):
+            for j in range(0, 4):
+                if self.numbers[i, j] == 0:
+                    empties.append({
+                        "i": i,
+                        "j": j,
+                    })
+        return empties
+
+    def fill_empty(self, value, i, j):
+        self.numbers[i, j] = value
+
+    def add_recent_move(self, key):
+        self.recent_moves.append({
+            "key": key,
+            "numbers": self.numbers.tolist(),
+        })
+
     @staticmethod
     def calculate_table(numbers):
         score = 0
@@ -50,6 +74,10 @@ class Game:
             if np.array_equal(down_row, np.array(EMPTY_ROW)):
                 numbers[i + 1] = current
                 numbers[i] = EMPTY_ROW
+                if i != 0:
+                    if not np.array_equal(numbers[i - 1], np.array(EMPTY_ROW)):
+                        numbers[i] = numbers[i - 1]
+                        numbers[i - 1] = EMPTY_ROW
                 continue
             for j in range(0, 4):
                 if current[j] == down_row[j]:
@@ -59,15 +87,14 @@ class Game:
                 elif down_row[j] == 0:
                     down_row[j] = current[j]
                     current[j] = 0
-                elif i + 2 < len(numbers):
-                    if numbers[i + 2][j] == 0:
-                        numbers[i + 2][j] = down_row[j]
-                        down_row[j] = current[j]
-                    elif down_row[j] == numbers[i + 2][j]:
-                        numbers[i + 2][j] += down_row[j]
-                        score += numbers[i + 2][j]
-                        down_row[j] = current[j]
-                    current[j] = 0
+                elif current[j] != down_row[j]:
+                    if i == 2:
+                        continue
+
+                if i != 0:
+                    if numbers[i - 1][j] != 0:
+                        current[j] = numbers[i - 1][j]
+                        numbers[i - 1][j] = 0
 
             numbers[i + 1] = down_row
             numbers[i] = current
