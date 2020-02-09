@@ -9,6 +9,8 @@ with open('movements.json') as json_file:
         movement = movements[i]
         movement["numbers"].insert(0, [0, 1, 2, 3])
         print("key: ", movement["key"])
+        print("random location: ", movement["random_location"])
+        print("random number: ", movement["random_number"])
         table = AsciiTable(movement["numbers"])
         table.padding_left = 4
         table.padding_right = 4

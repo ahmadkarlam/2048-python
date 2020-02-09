@@ -34,13 +34,14 @@ def main(stdscr):
             last_key = "left"
         elif c == ord("q"):
             break
-        # record last move
-        game.add_recent_move(last_key)
-
         empties = game.get_empty_cell()
         index = random.randint(0, len(empties) - 1)
         empty = empties[index]
-        game.fill_empty(random.choice([2, 4]), empty["i"], empty["j"])
+        random_number = random.choice([2, 4])
+        game.fill_empty(random_number, empty["i"], empty["j"])
+
+        # record last move
+        game.add_recent_move(last_key, str(empty["i"]) + "," + str(empty["j"]), random_number)
 
         stdscr.clear()
 

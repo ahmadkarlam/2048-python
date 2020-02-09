@@ -10,6 +10,8 @@ class Game:
         self.numbers = np.array(numbers)
         self.recent_moves = [{
             "key": "initial",
+            "random_location": "-",
+            "random_number": 0,
             "numbers": self.numbers.tolist(),
         }]
         self.score = 0
@@ -59,9 +61,11 @@ class Game:
     def fill_empty(self, value, i, j):
         self.numbers[i, j] = value
 
-    def add_recent_move(self, key):
+    def add_recent_move(self, key, random_location, random_number):
         self.recent_moves.append({
             "key": key,
+            "random_location": random_location,
+            "random_number": random_number,
             "numbers": self.numbers.tolist(),
         })
 

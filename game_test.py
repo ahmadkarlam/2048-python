@@ -293,6 +293,22 @@ class TestGame(unittest.TestCase):
             [0, 0, 2, 32],
         ]))
 
+    def test_movement_3(self):
+        game = Game([
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 8, 0, 0],
+            [0, 16, 4, 4],
+        ])
+        game.right()
+        actual = game.numbers
+        self.assertTrue(np.array_equal(actual, [
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 8],
+            [0, 0, 16, 8],
+        ]))
+
 
 if __name__ == '__main__':
     unittest.main()
